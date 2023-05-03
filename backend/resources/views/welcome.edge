@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdonisJS - A fully featured web framework for Node.js</title>
+  {{--  @entryPointStyles('app')
+  @entryPointScripts('app')  --}}
+</head>
+<body>
+
+  <main>
+    <div>
+      <h1 class="title"> It Works! </h1>
+      @each((item,index) in posts)
+     
+          <h4>Aurthor: {{item.user.username}}</h4>
+          
+          <h3>Post: {{item.content}}</h3>
+          <p>Post_Likes: {{item.likes.length}}</p>
+          @each(item1 in item.comments)
+            <h5>Comment : {{item1.content}}</h5>
+            <p>Comment_Likes: {{item1.commentlikes.length}}</p>
+
+            @each(item2 in item1.commentreplies)
+              <h4>Comment_Reply: {{item2.content}}</h4>  
+            @end
+          @end        
+         
+      @end
+    </div>
+  </main>
+</body>
+</html>

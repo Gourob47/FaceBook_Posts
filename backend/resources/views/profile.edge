@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  This is Profile Page
+  <br>
+
+  <div>
+    Name: {{user.name}}
+    <br>
+    Username: {{user.username}}
+    <br>
+    User Email: {{user.email}}
+    <br>
+  </div>
+
+
+  @if(auth.user.id===user.id)
+  <a href="/edit">Edit Profile</a>
+  <a href="/create">Create Post</a>
+  <form action="/logout" method="post">
+    <button type="submit">Logout</button>
+  </form>
+  @else
+
+  @if(auth.user.follows.map(f=>f.followingId).includes(user.id))
+  <form action="{{`/follow/${user.id}?_method=delete`}}" method="post">
+    <button type="submit">UnFollow</button>
+  </form>
+
+  @else
+  <form action="{{`/follow/${user.id}`}}" method="post">
+    <button type="submit">Follow</button>
+  </form>
+
+  @end
+
+  @end
+
+
+  {{JSON.stringify(user.comments)}}
+  {{JSON.stringify(auth.user.comments)}}
+
+  <h3>Posts Lists</h3>
+  @each((item,index) in user.posts)
+  {{JSON.stringify(item)}}
+  <h3>{{index+1}}: {{item.content}} </h3>
+
+
+  @if(auth.user.likes.map(l=>l.postId).includes(item.id))
+  <form action="{{`/like/${auth.user.id}/${item.id}?_method=delete`}}" method="post">
+    <button type="submit">Unlike</button>
+  </form>
+  @else
+  <form action="{{`/like/${auth.user.id}/${item.id}`}}" method="post">
+    <button type="submit">like</button>
+  </form>
+  @end
+
+
+  @if(auth.user.id==user.id)
+  <form action="{{`/postedit/pe/${auth.user.id}/${item.id}`}}" method="get">
+    <button type="submit">Edit_Post</button>
+  </form>
+
+  <form action="{{`/postedit/pe/${auth.user.id}/${item.id}?_method=delete`}}" method="post">
+    <button type="submit">delete</button>
+  </form>
+  @end
+
+
+
+
+
+
+  <form action="{{`/${item.id}/${user.id}`}}" method="post">
+    <textarea name="content" rows="5" placeholder="Write a Comment"></textarea>
+    <br>
+    <button type="submit">Write a Comment</button>
+  </form>
+
+
+
+ 
+  @each(item1 in user.comments)
+
+  @if(item1.postId===item.id)
+  <h3>Comment: {{item1.content}}</h3>
+  <div>
+
+
+
+    @if(auth.user.commentlikes.map(l=>l.commentId).includes(item1.id))
+    <form action="{{`/comment_like/${auth.user.id}/${item.id}/${item1.id}?_method=delete`}}" method="post">
+      <button type="submit">unlike</button>
+    </form>
+    @else
+    <form action="{{`/comment_like/${auth.user.id}/${item.id}/${item1.id}`}}" method="post">
+      <button type="submit">like</button>
+    </form>
+
+    @end
+
+
+    {{auth.user.id}} {{user.id}}
+
+
+
+
+    <form action="{{`/${item.id}/${user.id}/${item1.id}`}}" method="post">
+      <textarea name="content" rows="3" placeholder="Reply a Comment"></textarea>
+      <br>
+      <button type="submit">Reply a Comment</button>
+    </form>
+  </div>
+
+
+
+
+  {{--@each(item2 in user.commentreplies)
+  @if(item2.commentId==item1.id)
+  <h4>Comment_Reply : {{item2.content}}</h4>
+  @end
+
+
+
+  @end--}}
+
+
+  @end
+
+
+  @end
+
+
+
+
+
+
+
+
+  @end
+
+
+
+</body>
+
+</html>
